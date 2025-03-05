@@ -11,7 +11,7 @@ import SwiftUI
 struct HSKApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
         }
     }
 }
