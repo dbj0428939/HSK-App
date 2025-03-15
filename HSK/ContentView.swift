@@ -5016,7 +5016,6 @@ private let flashcardsHSK6: [Flashcard] = [
 
 ]
 
-    
 
 
 struct ContentView: View {
@@ -5026,9 +5025,9 @@ struct ContentView: View {
     }
     @State private var selectedHSKLevel: HSKLevel = .hsk1
     @State private var selectedLevel = 1
-    @AppStorage(UserDefaultsKeys.alwaysShowDefinition) private var alwaysShowDefinition = false
     @AppStorage(UserDefaultsKeys.showPinyin) private var showPinyin = true
     @AppStorage(UserDefaultsKeys.isShuffledKey) private var isShuffled = false
+    @AppStorage("alwaysShowDefinition") private var alwaysShowDefinition = false
     @State private var showDefinition = false
     @State private var currentIndex = 0
     @State private var showSettings = false
@@ -5310,6 +5309,8 @@ struct ContentView: View {
         @State private var scale: CGFloat = 1.0
         @GestureState private var dragOffset: CGFloat = 0
         @State private var offset: CGFloat = 0
+        @State private var localFlashcards: [Flashcard]
+        @State private var isShuffleActive: Bool = false
         
         init(flashcard: Flashcard, flashcards: [Flashcard], currentIndex: Int, onIndexChange: @escaping (Int) -> Void, alwaysShowDefinition: Binding<Bool>, isViewed: Bool, viewedFlashcards: Binding<Set<UUID>>, showPinyin: Binding<Bool>) {
             self.flashcard = flashcard
@@ -5321,10 +5322,23 @@ struct ContentView: View {
             self._viewedFlashcards = viewedFlashcards
             self._showPinyin = showPinyin
             self._localCurrentIndex = State(initialValue: currentIndex)
+            self._localFlashcards = State(initialValue: flashcards)
         }
         
         private var currentFlashcard: Flashcard {
-            flashcards[localCurrentIndex]
+            localFlashcards[localCurrentIndex]
+        }
+
+        private func shuffleFlashcards() {
+            withAnimation {
+                isShuffleActive.toggle()
+                let currentCard = localFlashcards[localCurrentIndex]
+                localFlashcards.shuffle()
+                if let newIndex = localFlashcards.firstIndex(where: { $0.id == currentCard.id }) {
+                    localCurrentIndex = newIndex
+                    onIndexChange(newIndex)
+                }
+            }
         }
         
         var body: some View {
@@ -5439,29 +5453,6 @@ struct ContentView: View {
                     
                     HStack(spacing: 40) {
                         Button(action: {
-                            if !isViewed {
-                                viewedFlashcards.insert(flashcard.id)
-                                saveViewedFlashcards()
-                            } else {
-                                viewedFlashcards.remove(flashcard.id)
-                                saveViewedFlashcards()
-                            }
-                        }) {
-                            VStack {
-                                Image(systemName: isViewed ? "eye.slash.fill" : "eye.fill")
-                                    .font(.system(size: 24))
-                                Text(isViewed ? "Unmark" : "Mark")
-                                    .font(.caption)
-                            }
-                            .foregroundColor(isViewed ? .gray : .blue)
-                            .padding()
-                            .frame(width: 80, height: 80)
-                            .background(Color.white.opacity(0.9))
-                            .clipShape(Circle())
-                            .shadow(color: .gray.opacity(0.2), radius: 4, x: 0, y: 2)
-                        }
-                        
-                        Button(action: {
                             withAnimation {
                                 showLocalPinyin.toggle()
                             }
@@ -5515,6 +5506,16 @@ struct ContentView: View {
                         Image(systemName: "chevron.left")
                             .font(.title2)
                             .foregroundColor(colorScheme == .dark ? .white : .blue)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        shuffleFlashcards()
+                    }) {
+                        Image(systemName: "shuffle")
+                            .font(.title2)
+                            .foregroundColor(isShuffleActive ? .green : (colorScheme == .dark ? .white : .blue))
+                            .animation(.easeInOut, value: isShuffleActive)
                     }
                 }
             }
@@ -5574,7 +5575,8 @@ struct ContentView: View {
         @Binding var showPinyin: Bool
         @Binding var isShuffled: Bool
         @Binding var viewedFlashcards: Set<UUID>
-        @Environment(\.presentationMode) var presentationMode
+        @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+        @Environment(\.colorScheme) private var colorScheme: ColorScheme
         
         var body: some View {
             NavigationView {
@@ -5588,18 +5590,6 @@ struct ContentView: View {
                         if #available(iOS 16.0, *) {
                             Form {
                                 Section {
-                                    Toggle(isOn: $alwaysShowDefinition) {
-                                        Label {
-                                            Text("Always Show Definition")
-                                                .font(.system(.body, design: .rounded))
-                                                .foregroundColor(.black)
-                                        } icon: {
-                                            Image(systemName: "text.book.closed")
-                                                .foregroundColor(.blue)
-                                        }
-                                    }
-                                    .toggleStyle(SwitchToggleStyle(tint: Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1))))
-                                    
                                     Toggle(isOn: $showPinyin) {
                                         Label {
                                             Text("Show Pinyin")
@@ -5685,3 +5675,5 @@ struct ContentView: View {
         }
     }
 }
+
+
