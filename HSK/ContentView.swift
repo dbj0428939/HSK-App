@@ -8,6 +8,7 @@ struct UserDefaultsKeys {
     static let showPinyin = "ShowPinyin"
     static let hasLaunchedBefore = "HasLaunchedBefore"
     static let isShuffledKey = "IsShuffledKey"
+    static let hasSeenSwipeTutorial = "HasSeenSwipeTutorial"
 }
 
 
@@ -5013,12 +5014,17 @@ private let flashcardsHSK6: [Flashcard] = [
     Flashcard(character: "座右铭", pinyin: "zuò yòu míng", definition: "motto; maxim"),
     // End of HSK 6 Flashcards
 
-
 ]
 
 
-
 struct ContentView: View {
+    // Remove these duplicate state variables
+    // @State private var showSettings = false
+    // @State private var alwaysShowDefinition = false
+    // @State private var showPinyin = false
+    // @State private var isShuffled = false
+    
+    @State private var showSettings = false  // Keep only this one for sheet presentation
     @Namespace private var namespace
     enum HSKLevel: Int, CaseIterable {
         case hsk1, hsk2, hsk3, hsk4, hsk5, hsk6
@@ -5030,7 +5036,6 @@ struct ContentView: View {
     @AppStorage("alwaysShowDefinition") private var alwaysShowDefinition = false
     @State private var showDefinition = false
     @State private var currentIndex = 0
-    @State private var showSettings = false
     @State private var searchText = ""
     @State private var isSearching = false
     @State private var shuffledFlashcards: [Flashcard] = []
@@ -5168,46 +5173,43 @@ struct ContentView: View {
                     // Header
                     HStack {
                         Button(action: {
-                            // Menu action
+                            shuffleFlashcards()
                         }) {
-                            Menu {
-                                ForEach(HSKLevel.allCases, id: \.self) { level in
-                                    Button("HSK \(level.rawValue + 1)") {
-                                        selectHSKLevel(level)
-                                    }
-                                }
-                            } label: {
-                                Image(systemName: "line.horizontal.3")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                            }
+                            Image(systemName: "shuffle")
+                                .font(.title2)
+                                .foregroundColor(.white)
                         }
-                        .padding(.leading, 32)
                         
                         Spacer()
                         
-                        HStack(spacing: 15) {
-                            Text("HSK \(selectedHSKLevel.rawValue + 1)")
-                                .font(.system(size: 32, weight: .heavy, design: .rounded))
-                                .foregroundColor(.white)
-                                .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 2)
-                            
-                            Button(action: {
-                                shuffleFlashcards()
-                            }) {
-                                Image(systemName: "shuffle")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
+                        Menu {
+                            ForEach(HSKLevel.allCases, id: \.self) { level in
+                                Button("HSK \(level.rawValue + 1)") {
+                                    selectHSKLevel(level)
+                                }
                             }
-                            
-                            NavigationLink(destination: SettingsView(alwaysShowDefinition: $alwaysShowDefinition, showPinyin: $showPinyin, isShuffled: $isShuffled, viewedFlashcards: $viewedFlashcards)) {
-                                Image(systemName: "gear")
-                                    .font(.title2)
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("HSK \(selectedHSKLevel.rawValue + 1)")
+                                    .font(.system(size: 32, weight: .heavy, design: .rounded))
+                                    .foregroundColor(.white)
+                                Image(systemName: "chevron.down")
+                                    .font(.title3)
                                     .foregroundColor(.white)
                             }
                         }
-                        .padding(.trailing, 32)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            showSettings.toggle()
+                        }) {
+                            Image(systemName: "gear")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                        }
                     }
+                    .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                     .frame(maxWidth: .infinity)
                     .background(
@@ -5219,13 +5221,9 @@ struct ContentView: View {
                                 ]), startPoint: .leading, endPoint: .trailing)
                             )
                             .opacity(0.9)
-                            .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
                     )
                     .padding(.horizontal)
                     .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0)
-                    .padding(.bottom, 8)
-                    .padding(.horizontal)
-                    .padding(.top, 0)
                     
                     SearchBar(text: $searchText, isSearching: $isSearching)
                         .padding(.horizontal)
@@ -5272,16 +5270,24 @@ struct ContentView: View {
                         
                     }
                 }
-            }
-            .navigationBarHidden(true)
-            .ignoresSafeArea(edges: .top)
-            .navigationViewStyle(StackNavigationViewStyle())
-            .onAppear {
-                if UserDefaults.standard.object(forKey: UserDefaultsKeys.isShuffledKey) == nil {
-                    isShuffled = false // Set the default value (false in this case)
-                    UserDefaults.standard.set(isShuffled, forKey: UserDefaultsKeys.isShuffledKey)
+                .sheet(isPresented: $showSettings) {
+                    SettingsView(
+                        alwaysShowDefinition: $alwaysShowDefinition,
+                        showPinyin: $showPinyin,
+                        isShuffled: $isShuffled,
+                        viewedFlashcards: $viewedFlashcards
+                    )
                 }
-                shuffleFlashcardsIfNeeded()
+                .navigationBarHidden(true)
+                .ignoresSafeArea(edges: .top)
+                .navigationViewStyle(StackNavigationViewStyle())
+                .onAppear {
+                    if UserDefaults.standard.object(forKey: UserDefaultsKeys.isShuffledKey) == nil {
+                        isShuffled = false // Set the default value (false in this case)
+                        UserDefaults.standard.set(isShuffled, forKey: UserDefaultsKeys.isShuffledKey)
+                    }
+                    shuffleFlashcardsIfNeeded()
+                }
             }
         }
     }
@@ -5354,6 +5360,35 @@ struct ContentView: View {
                 VStack(spacing: 0) {
                     Spacer()
                     VStack(spacing: 24) {
+                        Text(currentFlashcard.character)
+                            .font(.system(size: 72, weight: .medium, design: .rounded))
+                            .foregroundColor(colorScheme == .dark ? .white : Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1)))
+                            .shadow(color: .gray.opacity(0.3), radius: 2, x: 0, y: 2)
+                            .scaleEffect(scale)
+                            .offset(x: dragOffset)
+                        
+                        if showLocalPinyin {
+                            Text(currentFlashcard.pinyin)
+                                .font(.system(size: 32, weight: .regular, design: .rounded))
+                                .foregroundColor(colorScheme == .dark ? .white : .blue)
+                                .transition(.opacity)
+                                .offset(x: dragOffset)
+                        }
+                        
+                        if (alwaysShowDefinition || showDefinition) {
+                            Text(currentFlashcard.definition)
+                                .font(.system(size: 24))
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal)
+                                .transition(.opacity)
+                                .offset(x: dragOffset)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 20) {
                         HStack {
                             Button(action: {
                                 withAnimation {
@@ -5373,37 +5408,21 @@ struct ContentView: View {
                             
                             Spacer()
                             
-                            Text(currentFlashcard.character)
-                                .font(.system(size: 72, weight: .medium, design: .rounded))
-                                .foregroundColor(colorScheme == .dark ? .white : Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1)))
-                                .shadow(color: .gray.opacity(0.3), radius: 2, x: 0, y: 2)
-                                .scaleEffect(scale)
-                                .offset(x: dragOffset)
-                                .gesture(
-                                    DragGesture()
-                                        .updating($dragOffset) { value, state, _ in
-                                            state = value.translation.width
-                                        }
-                                        .onEnded { value in
-                                            let threshold: CGFloat = 50
-                                            if value.translation.width > threshold {
-                                                // Swipe right - go to previous
-                                                let newIndex = (localCurrentIndex - 1 + flashcards.count) % flashcards.count
-                                                animateTransition {
-                                                    localCurrentIndex = newIndex
-                                                    onIndexChange(newIndex)
-                                                }
-                                            } else if value.translation.width < -threshold {
-                                                // Swipe left - go to next
-                                                let newIndex = (localCurrentIndex + 1) % flashcards.count
-                                                animateTransition {
-                                                    localCurrentIndex = newIndex
-                                                    onIndexChange(newIndex)
-                                                }
-                                            }
-                                        }
-                                )
-                                .animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0), value: dragOffset)
+                            // Add swipe indicator
+                            HStack(spacing: 4) {
+                                Image(systemName: "arrow.left")
+                                    .font(.system(size: 14))
+                                Text("swipe")
+                                    .font(.system(size: 14, weight: .medium))
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 14))
+                            }
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.white.opacity(0.9))
+                            .cornerRadius(15)
+                            .shadow(color: .gray.opacity(0.2), radius: 2, x: 0, y: 1)
                             
                             Spacer()
                             
@@ -5423,64 +5442,18 @@ struct ContentView: View {
                             }
                             .padding(.horizontal, 20)
                         }
-                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 10)
                         
-                        if showLocalPinyin {
-                            Text(currentFlashcard.pinyin)
-                                .font(.system(size: 32, weight: .regular, design: .rounded))
-                                .foregroundColor(colorScheme == .dark ? .white : .blue)
-                                .transition(.opacity)
-                        }
-                        
-                        if (alwaysShowDefinition || isViewed || showDefinition) {
-                            if (!isViewed || showDefinition) || alwaysShowDefinition {
-                                Text(currentFlashcard.definition)
-                                    .font(.system(.title3, design: .rounded))
-                                    .foregroundColor(colorScheme == .dark ? .white : .primary)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.horizontal)
-                                    .transition(.opacity)
-                            } else {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .font(.system(size: 48))
-                                    .foregroundColor(.green)
-                                    .transition(.scale)
-                            }
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 40) {
-                        Button(action: {
-                            withAnimation {
-                                showLocalPinyin.toggle()
-                            }
-                        }) {
-                            VStack {
-                                Image(systemName: "character")
-                                    .font(.system(size: 24))
-                                Text(showLocalPinyin ? "Hide" : "Pinyin")
-                                    .font(.caption)
-                            }
-                            .foregroundColor(.blue)
-                            .padding()
-                            .frame(width: 80, height: 80)
-                            .background(Color.white.opacity(0.9))
-                            .clipShape(Circle())
-                            .shadow(color: .gray.opacity(0.2), radius: 4, x: 0, y: 2)
-                        }
-                        
-                        if !alwaysShowDefinition {
+                        HStack(spacing: 40) {
                             Button(action: {
                                 withAnimation {
-                                    showDefinition.toggle()
+                                    showLocalPinyin.toggle()
                                 }
                             }) {
                                 VStack {
-                                    Image(systemName: showDefinition ? "book.closed.fill" : "book.fill")
+                                    Image(systemName: "character")
                                         .font(.system(size: 24))
-                                    Text(showDefinition ? "Hide" : "Show")
+                                    Text(showLocalPinyin ? "Hide" : "Pinyin")
                                         .font(.caption)
                                 }
                                 .foregroundColor(.blue)
@@ -5490,16 +5463,69 @@ struct ContentView: View {
                                 .clipShape(Circle())
                                 .shadow(color: .gray.opacity(0.2), radius: 4, x: 0, y: 2)
                             }
+                            
+                            if !alwaysShowDefinition {
+                                Button(action: {
+                                    withAnimation {
+                                        showDefinition.toggle()
+                                    }
+                                }) {
+                                    VStack {
+                                        Image(systemName: showDefinition ? "book.closed.fill" : "book.fill")
+                                            .font(.system(size: 24))
+                                        Text(showDefinition ? "Hide" : "Show")
+                                            .font(.caption)
+                                    }
+                                    .foregroundColor(.blue)
+                                    .padding()
+                                    .frame(width: 80, height: 80)
+                                    .background(Color.white.opacity(0.9))
+                                    .clipShape(Circle())
+                                    .shadow(color: .gray.opacity(0.2), radius: 4, x: 0, y: 2)
+                                }
+                            }
                         }
+                        .padding(.bottom, 50)
                     }
-                    .padding(.bottom, 50)
                 }
                 .padding()
             }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .updating($dragOffset) { value, state, _ in
+                        state = value.translation.width
+                    }
+                    .onEnded { value in
+                        let threshold: CGFloat = 50
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7, blendDuration: 0)) {
+                            if value.translation.width > threshold {
+                                // Swipe right - go to previous
+                                let newIndex = (localCurrentIndex - 1 + flashcards.count) % flashcards.count
+                                animateTransition {
+                                    localCurrentIndex = newIndex
+                                    onIndexChange(newIndex)
+                                }
+                            } else if value.translation.width < -threshold {
+                                // Swipe left - go to next
+                                let newIndex = (localCurrentIndex + 1) % flashcards.count
+                                animateTransition {
+                                    localCurrentIndex = newIndex
+                                    onIndexChange(newIndex)
+                                }
+                            }
+                        }
+                    }
+            )
+            .onAppear {
+                if !isViewed {
+                    viewedFlashcards.insert(flashcard.id)
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+            .navigationBarItems(
+                leading: HStack {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
@@ -5507,8 +5533,8 @@ struct ContentView: View {
                             .font(.title2)
                             .foregroundColor(colorScheme == .dark ? .white : .blue)
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                },
+                trailing: HStack {
                     Button(action: {
                         shuffleFlashcards()
                     }) {
@@ -5518,7 +5544,7 @@ struct ContentView: View {
                             .animation(.easeInOut, value: isShuffleActive)
                     }
                 }
-            }
+            )
         }
         
         private func saveViewedFlashcards() {
@@ -5554,12 +5580,6 @@ struct ContentView: View {
                     .foregroundColor(.blue)
                     .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 2)
                 
-                if isViewed {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                        .font(.system(size: 20))
-                }
-                
                 if showPinyin {
                     Text(flashcard.pinyin)
                         .font(.system(size: 18, weight: .regular, design: .rounded))
@@ -5575,82 +5595,24 @@ struct ContentView: View {
         @Binding var showPinyin: Bool
         @Binding var isShuffled: Bool
         @Binding var viewedFlashcards: Set<UUID>
-        @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-        @Environment(\.colorScheme) private var colorScheme: ColorScheme
+        @Environment(\.presentationMode) var presentationMode
         
         var body: some View {
             NavigationView {
-                ZStack {
-                    LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1)), Color(#colorLiteral(red: 0.2, green: 0.8, blue: 0.8, alpha: 1))]),
-                                   startPoint: .top,
-                                   endPoint: .bottom)
-                    .edgesIgnoringSafeArea(.all)
-                    
-                    VStack(spacing: 20) {
-                        if #available(iOS 16.0, *) {
-                            Form {
-                                Section {
-                                    Toggle(isOn: $showPinyin) {
-                                        Label {
-                                            Text("Show Pinyin")
-                                                .font(.system(.body, design: .rounded))
-                                                .foregroundColor(.black)
-                                        } icon: {
-                                            Image(systemName: "character")
-                                                .foregroundColor(.blue)
-                                        }
-                                    }
-                                    .toggleStyle(SwitchToggleStyle(tint: Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1))))
-                                    
-                                    Toggle(isOn: $isShuffled) {
-                                        Label {
-                                            Text("Shuffle Cards")
-                                                .font(.system(.body, design: .rounded))
-                                                .foregroundColor(.black)
-                                        } icon: {
-                                            Image(systemName: "shuffle")
-                                                .foregroundColor(.blue)
-                                        }
-                                    }
-                                    .toggleStyle(SwitchToggleStyle(tint: Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1))))
-                                }
-                                .listRowBackground(Color.white.opacity(0.8))
-                            }
-                            .scrollContentBackground(.hidden)
-                        } else {
-                            // Fallback on earlier versions
-                        }
-                    }
-                    .navigationBarTitleDisplayMode(.large)
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: {
-                                presentationMode.wrappedValue.dismiss()
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        ToolbarItem(placement: .principal) {
-                            Text("Settings")
-                                .font(.system(size: 32, weight: .heavy, design: .rounded))
-                                .foregroundColor(.white)
-                                .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 2)
-                        }
+                Form {
+                    Section(header: Text("Display Settings")) {
+                        Toggle("Always Show Definition", isOn: $alwaysShowDefinition)
+                        Toggle("Show Pinyin", isOn: $showPinyin)
+                        Toggle("Shuffle Cards", isOn: $isShuffled)
                     }
                 }
+                .navigationTitle("Settings")
+                .navigationBarItems(
+                    trailing: Button("Done") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                )
             }
-            .navigationBarHidden(true)
-        }
-        
-        private func unshuffleFlashcards() {
-            isShuffled = false
-        }
-        
-        private func unmarkAllViewedFlashcards() {
-            viewedFlashcards.removeAll()
         }
     }
     
@@ -5675,5 +5637,3 @@ struct ContentView: View {
         }
     }
 }
-
-
