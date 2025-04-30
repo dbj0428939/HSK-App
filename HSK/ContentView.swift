@@ -5014,6 +5014,8 @@ private let flashcardsHSK6: [Flashcard] = [
     Flashcard(character: "座右铭", pinyin: "zuò yòu míng", definition: "motto; maxim"),
     // End of HSK 6 Flashcards
 
+
+
 ]
 
 
@@ -5178,7 +5180,11 @@ struct ContentView: View {
                             Image(systemName: "shuffle")
                                 .font(.title2)
                                 .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Circle()) // Changed to Circle for better tap detection
+                                .padding(8) // Smaller padding to maintain header size
                         }
+                        .buttonStyle(PlainButtonStyle())
                         
                         Spacer()
                         
@@ -5197,7 +5203,10 @@ struct ContentView: View {
                                     .font(.title3)
                                     .foregroundColor(.white)
                             }
+                            .contentShape(Rectangle())
+                            .padding(8) // Smaller padding to maintain header size
                         }
+                        .buttonStyle(PlainButtonStyle())
                         
                         Spacer()
                         
@@ -5207,7 +5216,11 @@ struct ContentView: View {
                             Image(systemName: "gear")
                                 .font(.title2)
                                 .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Circle()) // Changed to Circle for better tap detection
+                                .padding(8) // Smaller padding to maintain header size
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -5280,7 +5293,6 @@ struct ContentView: View {
                 }
                 .navigationBarHidden(true)
                 .ignoresSafeArea(edges: .top)
-                .navigationViewStyle(StackNavigationViewStyle())
                 .onAppear {
                     if UserDefaults.standard.object(forKey: UserDefaultsKeys.isShuffledKey) == nil {
                         isShuffled = false // Set the default value (false in this case)
@@ -5290,14 +5302,10 @@ struct ContentView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
-        }
-    }
-    
-    struct FlashcardDetailView: View {
+}
+struct FlashcardDetailView: View {
         let flashcard: Flashcard
         let flashcards: [Flashcard]
         let currentIndex: Int
@@ -5636,4 +5644,4 @@ struct ContentView: View {
             .padding(.horizontal)
         }
     }
-}
+

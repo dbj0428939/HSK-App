@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
 		3BAF53F02D780948004EDD29 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF53EF2D780948004EDD29 /* SplashScreenView.swift */; };
 		3BFD2A5F2AB7AC2F00E832B9 /* HSKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD2A5E2AB7AC2F00E832B9 /* HSKApp.swift */; };
 		3BFD2A612AB7AC2F00E832B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD2A602AB7AC2F00E832B9 /* ContentView.swift */; };
@@ -15,46 +14,7 @@
 		3BFD2A662AB7AC2F00E832B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BFD2A652AB7AC2F00E832B9 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		3B1970772D8BB4D7001D25FD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3BFD2A532AB7AC2F00E832B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3B1970662D8BB4D6001D25FD;
-			remoteInfo = "HSK Watch Watch App";
-		};
-		3B1970812D8BB4D7001D25FD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3BFD2A532AB7AC2F00E832B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3B1970662D8BB4D6001D25FD;
-			remoteInfo = "HSK Watch Watch App";
-		};
-		3B1970882D8BB4D7001D25FD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3BFD2A532AB7AC2F00E832B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3B1970662D8BB4D6001D25FD;
-			remoteInfo = "HSK Watch Watch App";
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		3B19708B2D8BB4D7001D25FD /* Embed Watch Content */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
-			dstSubfolderSpec = 16;
-			files = (
-				3B19708A2D8BB4D7001D25FD /* HSK Watch Watch App.app in Embed Watch Content */,
-			);
-			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-
 		3BAF53EF2D780948004EDD29 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		3BFD2A5B2AB7AC2F00E832B9 /* HSK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HSK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BFD2A5E2AB7AC2F00E832B9 /* HSKApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSKApp.swift; sourceTree = "<group>"; };
@@ -64,27 +24,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3B1970642D8BB4D6001D25FD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B1970732D8BB4D7001D25FD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B19707D2D8BB4D7001D25FD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BFD2A582AB7AC2F00E832B9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,9 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				3BFD2A5B2AB7AC2F00E832B9 /* HSK.app */,
-				3B1970672D8BB4D6001D25FD /* HSK Watch Watch App.app */,
-				3B1970762D8BB4D7001D25FD /* HSK Watch Watch AppTests.xctest */,
-				3B1970802D8BB4D7001D25FD /* HSK Watch Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,7 +73,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-
 		3BFD2A5A2AB7AC2F00E832B9 /* HSK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BFD2A692AB7AC2F00E832B9 /* Build configuration list for PBXNativeTarget "HSK" */;
@@ -145,12 +80,10 @@
 				3BFD2A572AB7AC2F00E832B9 /* Sources */,
 				3BFD2A582AB7AC2F00E832B9 /* Frameworks */,
 				3BFD2A592AB7AC2F00E832B9 /* Resources */,
-
 			);
 			buildRules = (
 			);
 			dependencies = (
-
 			);
 			name = HSK;
 			productName = HSK;
@@ -167,17 +100,6 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					3B1970662D8BB4D6001D25FD = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					3B1970752D8BB4D7001D25FD = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 3B1970662D8BB4D6001D25FD;
-					};
-					3B19707F2D8BB4D7001D25FD = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 3B1970662D8BB4D6001D25FD;
-					};
 					3BFD2A5A2AB7AC2F00E832B9 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -197,33 +119,11 @@
 			projectRoot = "";
 			targets = (
 				3BFD2A5A2AB7AC2F00E832B9 /* HSK */,
-
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3B1970652D8BB4D6001D25FD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B1970742D8BB4D7001D25FD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B19707E2D8BB4D7001D25FD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BFD2A592AB7AC2F00E832B9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -236,27 +136,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3B1970632D8BB4D6001D25FD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B1970722D8BB4D7001D25FD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B19707C2D8BB4D7001D25FD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3BFD2A572AB7AC2F00E832B9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -269,176 +148,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		3B19708C2D8BB4D7001D25FD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"HSK Watch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "HSK Watch";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = dave.b.HSK;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dave.b.HSK.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		3B19708D2D8BB4D7001D25FD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"HSK Watch Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "HSK Watch";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = dave.b.HSK;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dave.b.HSK.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		3B19708E2D8BB4D7001D25FD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dave.b.HSK-Watch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HSK Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HSK Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		3B19708F2D8BB4D7001D25FD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dave.b.HSK-Watch-Watch-AppTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HSK Watch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HSK Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
-		3B1970902D8BB4D7001D25FD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dave.b.HSK-Watch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "HSK Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Debug;
-		};
-		3B1970912D8BB4D7001D25FD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LMQB65W6T8;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dave.b.HSK-Watch-Watch-AppUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				TEST_TARGET_NAME = "HSK Watch Watch App";
-				WATCHOS_DEPLOYMENT_TARGET = 11.2;
-			};
-			name = Release;
-		};
 		3BFD2A672AB7AC2F00E832B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -620,33 +330,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3B1970922D8BB4D7001D25FD /* Build configuration list for PBXNativeTarget "HSK Watch Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3B19708C2D8BB4D7001D25FD /* Debug */,
-				3B19708D2D8BB4D7001D25FD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3B1970932D8BB4D7001D25FD /* Build configuration list for PBXNativeTarget "HSK Watch Watch AppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3B19708E2D8BB4D7001D25FD /* Debug */,
-				3B19708F2D8BB4D7001D25FD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3B1970942D8BB4D7001D25FD /* Build configuration list for PBXNativeTarget "HSK Watch Watch AppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3B1970902D8BB4D7001D25FD /* Debug */,
-				3B1970912D8BB4D7001D25FD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		3BFD2A562AB7AC2F00E832B9 /* Build configuration list for PBXProject "HSK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
