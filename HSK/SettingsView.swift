@@ -10,19 +10,37 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Display Settings")) {
-                    Toggle("Always Show Definition", isOn: $alwaysShowDefinition)
-                    Toggle("Show Pinyin", isOn: $showPinyin)
-                    Toggle("Shuffle Cards", isOn: $isShuffled)
+                Section {
+                    Toggle(isOn: $alwaysShowDefinition) {
+                        Label("Always Show Definition", systemImage: "text.book.closed")
+                    }
+                    
+                    Toggle(isOn: $showPinyin) {
+                        Label("Show Pinyin", systemImage: "character.phonetic")
+                    }
+                    
+                    Toggle(isOn: $isShuffled) {
+                        Label("Shuffle Cards", systemImage: "shuffle")
+                    }
+                } header: {
+                    Text("Display Settings")
                 }
                 
                 Section {
                     Button(action: {
-                        viewedFlashcards.removeAll()
+                        withAnimation {
+                            viewedFlashcards.removeAll()
+                        }
                     }) {
-                        Text("Reset Viewed Cards")
-                            .foregroundColor(.red)
+                        HStack {
+                            Label("Reset Progress", systemImage: "arrow.counterclockwise")
+                            Spacer()
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                        }
                     }
+                } header: {
+                    Text("Progress")
                 }
             }
             .navigationTitle("Settings")

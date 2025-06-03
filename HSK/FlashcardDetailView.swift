@@ -20,6 +20,8 @@ struct FlashcardDetailView: View {
     @State private var offset: CGFloat = 0
     @State private var localFlashcards: [Flashcard]
     @State private var isShuffleActive: Bool = false
+    @State private var cardRotation: Double = 0
+    @State private var isFlipped: Bool = false
     
     init(flashcard: Flashcard, flashcards: [Flashcard], currentIndex: Int, onIndexChange: @escaping (Int) -> Void, alwaysShowDefinition: Binding<Bool>, isViewed: Bool, viewedFlashcards: Binding<Set<UUID>>, showPinyin: Binding<Bool>) {
         self.flashcard = flashcard
@@ -38,85 +40,45 @@ struct FlashcardDetailView: View {
         localFlashcards[localCurrentIndex]
     }
     
-    private func shuffleFlashcards() {
-        withAnimation {
-            isShuffleActive.toggle()
-            let currentCard = localFlashcards[localCurrentIndex]
-            localFlashcards.shuffle()
-            if let newIndex = localFlashcards.firstIndex(where: { $0.id == currentCard.id }) {
-                localCurrentIndex = newIndex
-                onIndexChange(newIndex)
-            }
-        }
-    }
-    
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [
-                Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1)).opacity(0.1),
-                Color(#colorLiteral(red: 0.2, green: 0.8, blue: 0.8, alpha: 1)).opacity(0.1)
-            ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-            .edgesIgnoringSafeArea(.all)
+            BackgroundGradient()
             
-            VStack(spacing: 0) {
+            VStack {
                 Spacer()
-                VStack(spacing: 24) {
-                    Text(currentFlashcard.character)
-                        .font(.system(size: 72, weight: .medium, design: .rounded))
-                        .foregroundColor(colorScheme == .dark ? .white : Color(#colorLiteral(red: 0, green: 0.4, blue: 0.9, alpha: 1)))
-                        .shadow(color: .gray.opacity(0.3), radius: 2, x: 0, y: 2)
-                        .scaleEffect(scale)
-                        .offset(x: dragOffset)
-                    
-                    if showLocalPinyin {
-                        Text(currentFlashcard.pinyin)
-                            .font(.system(size: 32, weight: .regular, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? .white : .blue)
-                            .transition(.opacity)
-                            .offset(x: dragOffset)
-                    }
-                    
-                    if (alwaysShowDefinition || showDefinition) {
-                        Text(currentFlashcard.definition)
-                            .font(.system(size: 24))
-                            .foregroundColor(colorScheme == .dark ? .white : .black)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-                            .transition(.opacity)
-                            .offset(x: dragOffset)
-                    }
-                }
+                
+                FlashCard(
+                    character: currentFlashcard.character,
+                    pinyin: currentFlashcard.pinyin,
+                    definition: currentFlashcard.definition,
+                    showPinyin: showLocalPinyin,
+                    showDefinition: alwaysShowDefinition || showDefinition,
+                    isFlipped: isFlipped
+                )
+                .rotation3DEffect(
+                    .degrees(cardRotation),
+                    axis: (x: 0, y: 1, z: 0)
+                )
+                .gesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+                                isFlipped.toggle()
+                                cardRotation += 180
+                                showDefinition.toggle()
+                                viewedFlashcards.insert(currentFlashcard.id)
+                            }
+                        }
+                )
                 
                 Spacer()
                 
-                HStack(spacing: 20) {
-                    Button(action: {
-                        withAnimation {
-                            showDefinition.toggle()
-                            viewedFlashcards.insert(currentFlashcard.id)
-                        }
-                    }) {
-                        Text(showDefinition ? "Hide Definition" : "Show Definition")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    
-                    Button(action: {
-                        withAnimation {
-                            showLocalPinyin.toggle()
-                        }
-                    }) {
-                        Text(showLocalPinyin ? "Hide Pinyin" : "Show Pinyin")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.green)
-                            .cornerRadius(10)
-                    }
-                }
+                ControlButtons(
+                    showPinyin: $showLocalPinyin,
+                    showDefinition: $showDefinition,
+                    isFlipped: $isFlipped,
+                    cardRotation: $cardRotation
+                )
                 .padding(.bottom, 30)
             }
             .padding()
@@ -128,5 +90,104 @@ struct FlashcardDetailView: View {
                 viewedFlashcards.insert(currentFlashcard.id)
             }
         }
+    }
+}
+
+struct BackgroundGradient: View {
+    var body: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color(.systemBackground),
+                Color(.systemBackground).opacity(0.8)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct FlashCard: View {
+    let character: String
+    let pinyin: String
+    let definition: String
+    let showPinyin: Bool
+    let showDefinition: Bool
+    let isFlipped: Bool
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(radius: 10)
+                .frame(height: 400)
+            
+            VStack(spacing: 24) {
+                if !isFlipped {
+                    Text(character)
+                        .font(.system(size: 100, weight: .medium, design: .rounded))
+                        .foregroundColor(.primary)
+                        .transition(.opacity)
+                    
+                    if showPinyin {
+                        Text(pinyin)
+                            .font(.system(size: 32, weight: .regular, design: .rounded))
+                            .foregroundColor(.blue)
+                            .transition(.opacity)
+                    }
+                } else {
+                    Text(definition)
+                        .font(.system(size: 28))
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .transition(.opacity)
+                }
+            }
+            .padding()
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct ControlButtons: View {
+    @Binding var showPinyin: Bool
+    @Binding var showDefinition: Bool
+    @Binding var isFlipped: Bool
+    @Binding var cardRotation: Double
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            Button(action: {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+                    isFlipped.toggle()
+                    cardRotation += 180
+                    showDefinition.toggle()
+                }
+            }) {
+                Label(isFlipped ? "Show Character" : "Show Definition", systemImage: "arrow.2.squarepath")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(15)
+            }
+            
+            Button(action: {
+                withAnimation {
+                    showPinyin.toggle()
+                }
+            }) {
+                Label(showPinyin ? "Hide Pinyin" : "Show Pinyin", systemImage: "character.phonetic")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green)
+                    .cornerRadius(15)
+            }
+        }
+        .padding(.horizontal)
     }
 }
