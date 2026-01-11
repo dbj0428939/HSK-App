@@ -83,10 +83,16 @@ struct SplashScreenView: View {
                         }
                         .padding(.top, 0)
                         
-                        Text("HSK")
-                            .font(.system(size: 40, weight: .bold, design: .rounded))
-                            .foregroundColor(.white.opacity(0.80))
-                            .padding(.top, 5)
+                        HStack(spacing: 6) {
+                            Text("HSK Flash")
+                                .font(.system(size: 40, weight: .bold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.80))
+                            Text("©")
+                                .font(.system(size: 24, weight: .bold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.80))
+                                .offset(y: 2)
+                        }
+                        .padding(.top, 5)
                         
                         Text("汉语水平考试")
                             .font(.system(size: 25, weight: .medium, design: .rounded))

@@ -30,19 +30,30 @@ struct SettingsView: View {
 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Title header card
-                        HStack {
-                            Text("Settings")
-                                .font(.system(size: 28, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Spacer()
-                            Button(action: { presentationMode.wrappedValue.dismiss() }) {
-                                Image(systemName: "xmark")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.white)
-                                    .padding(10)
-                                    .background(Circle().fill(Color.white.opacity(0.2)))
+                        // Title header card with branding
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                HStack(spacing: 6) {
+                                    Text("HSK Flash")
+                                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                    Text("©")
+                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                        .offset(y: 2)
+                                }
+                                Spacer()
+                                Button(action: { presentationMode.wrappedValue.dismiss() }) {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 18, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .padding(10)
+                                        .background(Circle().fill(Color.white.opacity(0.2)))
+                                }
                             }
+                            Text("Settings")
+                                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.85))
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 8)
