@@ -124,10 +124,21 @@ struct FlashCard: View {
             
             VStack(spacing: 24) {
                 if !isFlipped {
-                    Text(character)
-                        .font(.system(size: 100, weight: .medium, design: .rounded))
-                        .foregroundColor(.primary)
-                        .transition(.opacity)
+                    GeometryReader { proxy in
+                        let available = max(proxy.size.width - 120, 60)
+                        let count = max(character.count, 1)
+                        let sizeBase = max(26, min(100, (available / CGFloat(count)) * 0.42))
+                        let computed = count >= 4 ? CGFloat(18) : sizeBase
+                        Text(character)
+                            .font(.system(size: computed, weight: .medium, design: .rounded))
+                            .foregroundColor(.primary)
+                            .transition(.opacity)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.1)
+                            .allowsTightening(true)
+                            .frame(width: proxy.size.width, alignment: .center)
+                    }
+                    .frame(height: 160)
                     
                     if showPinyin {
                         Text(pinyin)
